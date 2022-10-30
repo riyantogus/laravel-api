@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,5 +17,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Auth
 Route::post('register', [RegisterController::class, 'Register']);
 Route::post('login', [LoginController::class, 'Login']);
+
+// User
+Route::prefix('users')->group(function () {
+    Route::get('/', [UserController::class, 'FindAll']);
+    Route::get('/{id}', [UserController::class, 'GetUser']);
+    Route::put('/{id}', [UserController::class, 'UpdateUser']);
+    Route::delete('/{id}', [UserController::class, 'DeleteUser']);
+});

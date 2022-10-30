@@ -17,6 +17,11 @@ class AppServiceProvider extends ServiceProvider
             'App\Service\Auth\AuthServiceInterface',
             'App\Service\Auth\AuthService',
         );
+
+        $this->app->bind(
+            'App\Service\User\UserServiceInterface',
+            'App\Service\User\UserService',
+        );
     }
 
     /**
