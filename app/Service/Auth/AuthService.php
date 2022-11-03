@@ -3,6 +3,7 @@
 namespace App\Service\Auth;
 
 use App\Http\Resources\RegisterResource;
+use App\Http\Resources\UserResource;
 use App\Repositories\Auth\AuthRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -64,8 +65,14 @@ class AuthService implements AuthServiceInterface
             ]);
         }
 
-        return Auth::attempt(['email' => $request->email, 'password' => $request->password]) ?
-            response()->json(['message' => 'You are successfully logged in.'], 200) :
-            response()->json(['message' => 'Invalid username or password'], 401);
+        if (!$token = Auth::attempt($validator->validated())) {
+            return response()->json(['message' => 'Invalid username or password'], 401);
+        }
+
+        return response()->json([
+            'message'       => 'You are successfully logged in.',
+            'user'          => new UserResource(Auth::user()),
+            'access_token'  => $token
+        ], 200);
     }
 }
